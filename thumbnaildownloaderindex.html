@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Thumbnail Downloader</title>
+    <style>
+        body {
+            background-color: red;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: black;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+        }
+        button {
+            padding: 15px 30px;
+            border: none;
+            background: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .preview {
+            width: 80%;
+            margin: 20px auto;
+            background: white;
+            padding: 10px;
+        }
+        .preview img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .download-btn {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 15px;
+            background: black;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- First Page -->
+    <div id="page1">
+        <h1>GET THUMBNAILS</h1>
+        <input type="text" id="videoURL" placeholder="Paste URL">
+        <button onclick="fetchThumbnail()">ENTER</button>
+    </div>
+
+    <!-- Second Page (Hidden Initially) -->
+    <div id="page2" style="display: none;">
+        <div class="preview">
+            <img id="thumbHD" src="" alt="Preview">
+        </div>
+        <a id="downloadHD" class="download-btn" download>DOWNLOAD HD</a>
+
+        <div class="preview">
+            <img id="thumbNormal" src="" alt="Preview">
+        </div>
+        <a id="downloadNormal" class="download-btn" download>DOWNLOAD NORMAL</a>
+
+        <div class="preview">
+            <img id="thumbLow" src="" alt="Preview">
+        </div>
+        <a id="downloadLow" class="download-btn" download>DOWNLOAD</a>
+    </div>
+
+    <script>
+        function getYouTubeID(url) {
+            let match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|.*\/v\/|.*\/e\/|.*embed\/|v=))([^#&?]{11})/);
+            return match ? match[1] : null;
+        }
+
+        function fetchThumbnail() {
+            let url = document.getElementById("videoURL").value;
+            let videoID = getYouTubeID(url);
+
+            if (videoID) {
+                let thumbHD = `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
+                let thumbNormal = `https://img.youtube.com/vi/${videoID}/hqdefault.jpg`;
+                let thumbLow = `https://img.youtube.com/vi/${videoID}/default.jpg`;
+
+                document.getElementById("thumbHD").src = thumbHD;
+                document.getElementById("downloadHD").href = thumbHD;
+                document.getElementById("downloadHD").setAttribute("download", "HD_thumbnail.jpg");
+
+                document.getElementById("thumbNormal").src = thumbNormal;
+                document.getElementById("downloadNormal").href = thumbNormal;
+                document.getElementById("downloadNormal").setAttribute("download", "Normal_thumbnail.jpg");
+
+                document.getElementById("thumbLow").src = thumbLow;
+                document.getElementById("downloadLow").href = thumbLow;
+                document.getElementById("downloadLow").setAttribute("download", "Low_thumbnail.jpg");
+
+                // Switch pages
+                document.getElementById("page1").style.display = "none";
+                document.getElementById("page2").style.display = "block";
+            } else {
+                alert("Invalid YouTube URL!");
+            }
+        }
+    </script>
+
+</body>
+</html>
